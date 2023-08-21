@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CustomGridManager</string>
+    <string name="sampleString">Sample</string>
+    <string name="title">Custom Recyclerview\'s LayoutManager!</string>
 </resources>

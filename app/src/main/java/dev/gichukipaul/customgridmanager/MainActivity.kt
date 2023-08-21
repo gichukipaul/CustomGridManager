@@ -3,6 +3,7 @@ package dev.gichukipaul.customgridmanager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import dev.gichukipaul.customgridmanager.Adapters.MainRecyclerAdapter
 import dev.gichukipaul.customgridmanager.Utils.CustomLayoutManager
 
 class MainActivity : AppCompatActivity() {
@@ -13,10 +14,15 @@ class MainActivity : AppCompatActivity() {
         val mainRecyclerView = findViewById<RecyclerView>(R.id.MainActivityRecyclerView)
 
         //  SET THE LAYOUT MANAGER
-        val layoutManager = CustomLayoutManager(this, 2, 5, true)
+        val layoutManager = CustomLayoutManager(this, 2, 5, false)
         mainRecyclerView.layoutManager = layoutManager
 
-        // TODO: SET THE ADAPTER ON THE RECYCLERVIEW
+        // SAMPLE DATA FOR THE RECYCLERVIEW
+        val itemList: List<String> = (1..20).map { "Item $it" }
 
+
+        // TODO: SET THE ADAPTER ON THE RECYCLERVIEW
+        val adapter = MainRecyclerAdapter(itemList)
+        mainRecyclerView.adapter = adapter
     }
 }
