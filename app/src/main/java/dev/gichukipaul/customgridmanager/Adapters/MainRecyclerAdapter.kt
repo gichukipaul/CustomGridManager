@@ -11,7 +11,11 @@ class MainRecyclerAdapter(private val listItems: List<String>) :
     RecyclerView.Adapter<MainRecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var textHolder: TextView = itemView.findViewById(R.id.item)
+        val textHolder: TextView
+
+        init {
+            textHolder = itemView.findViewById(R.id.item)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

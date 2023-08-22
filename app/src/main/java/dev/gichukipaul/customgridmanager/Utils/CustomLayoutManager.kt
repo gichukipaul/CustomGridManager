@@ -4,18 +4,33 @@ import android.content.Context
 import android.graphics.PointF
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.SmoothScroller.ScrollVectorProvider
 
 class CustomLayoutManager(
     private val context: Context,
+    private val recyclerView: RecyclerView,
     private val rows: Int,
     private val columns: Int,
     private val isReversed: Boolean
-) : GridLayoutManager(context, rows, RecyclerView.HORIZONTAL, isReversed), ScrollVectorProvider {
+) : GridLayoutManager(context, rows, RecyclerView.HORIZONTAL, isReversed),
+    OnSnapPositionChangeListener {
+
+    private val snap = PagerSnapHelper()
+    private val snapOnScrollListener = SnapOnScrollListener(
+        snap,
+        SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL_STATE_IDLE,
+        this
+    )
+
+    init {
+        recyclerView.addOnScrollListener(snapOnScrollListener)
+        snap.attachToRecyclerView(recyclerView)
+    }
 
     override fun computeScrollVectorForPosition(targetPosition: Int): PointF {
-        return PointF(1f, 0f)
+        val direction = if (isReversed) -1f else 1f
+        return PointF(direction, 0f)
     }
 
     fun smoothScrollToPage(pageIndex: Int) {
@@ -27,4 +42,24 @@ class CustomLayoutManager(
         smoothScroller.targetPosition = (pageIndex * rows * columns)
         startSmoothScroll(smoothScroller)
     }
+
+    override fun onSnapPositionChange(position: Int) {
+        val itemsPerPage = rows * columns
+        val currentPage = position / itemsPerPage
+        val nextPageStart = currentPage * itemsPerPage
+
+        val smoothScroller = object : LinearSmoothScroller(context) {
+            override fun computeScrollVectorForPosition(targetPosition: Int): PointF {
+                return this@CustomLayoutManager.computeScrollVectorForPosition(targetPosition)
+            }
+        }
+        // If reversed, adjust to snap to the end of the page
+        if (isReversed) {
+            smoothScroller.targetPosition = nextPageStart + (rows * columns) - 1
+        } else {
+            smoothScroller.targetPosition = nextPageStart
+        }
+        startSmoothScroll(smoothScroller)
+    }
+
 }

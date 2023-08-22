@@ -14,15 +14,15 @@ class MainActivity : AppCompatActivity() {
         val mainRecyclerView = findViewById<RecyclerView>(R.id.MainActivityRecyclerView)
 
         //  SET THE LAYOUT MANAGER
-        val layoutManager = CustomLayoutManager(this, 2, 5, false)
+        val layoutManager = CustomLayoutManager(this, mainRecyclerView, 2, 5, false)
         mainRecyclerView.layoutManager = layoutManager
 
         // SAMPLE DATA FOR THE RECYCLERVIEW
-        val itemList: List<String> = (1..20).map { "Item $it" }
+        val itemList: List<String> = (1..40).map { "Item $it" }
 
-
-        // TODO: SET THE ADAPTER ON THE RECYCLERVIEW
+        // SET THE ADAPTER ON THE RECYCLERVIEW
         val adapter = MainRecyclerAdapter(itemList)
         mainRecyclerView.adapter = adapter
     }
+
 }
