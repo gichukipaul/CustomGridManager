@@ -1,22 +1,36 @@
 package dev.gichukipaul.customgridmanager.Utils
 
-import android.view.View
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SnapHelper
 
-class CustomSnap : SnapHelper() {
+class CustomSnap(private val rows: Int, private val columns: Int) : PagerSnapHelper() {
 
-    override fun calculateDistanceToFinalSnap(layoutManager: RecyclerView.LayoutManager, targetView: View): IntArray {
-        return intArrayOf(0, 0)
+    // Change the sensitivity of the swiping. Smaller figures makes it swipe on small fling gestures.
+    companion object {
+        private const val MINIMUM_SCROLL_THRESHOLD = 0.1
     }
 
-    override fun findTargetSnapPosition(layoutManager: RecyclerView.LayoutManager, velocityX: Int, velocityY: Int): Int {
-        val snapView = findSnapView(layoutManager) ?: return RecyclerView.NO_POSITION
-        val snapPosition = layoutManager.getPosition(snapView)
-        return if (snapPosition == RecyclerView.NO_POSITION) RecyclerView.NO_POSITION else snapPosition
-    }
+    override fun findTargetSnapPosition(
+        layoutManager: RecyclerView.LayoutManager,
+        velocityX: Int,
+        velocityY: Int
+    ): Int {
+        val currentSnapPosition = super.findTargetSnapPosition(layoutManager, velocityX, velocityY)
+        if (currentSnapPosition != RecyclerView.NO_POSITION) {
+            val currentRow = currentSnapPosition / columns
+            val currentPage = currentRow * columns
+            val itemsPerPage = rows * columns
 
-    override fun findSnapView(layoutManager: RecyclerView.LayoutManager): View? {
-        return layoutManager.getChildAt(0)
+            // Calculate the threshold for snapping based on scroll distance
+            val scrollThreshold = layoutManager.width * MINIMUM_SCROLL_THRESHOLD
+
+            val nextPage = when {
+                velocityX > scrollThreshold -> currentPage + columns  // Scroll to the right
+                velocityX < -scrollThreshold -> currentPage - columns // Scroll to the left
+                else -> currentSnapPosition
+            }
+            return nextPage.coerceIn(0, layoutManager.itemCount - 1)
+        }
+        return currentSnapPosition
     }
 }
