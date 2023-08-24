@@ -19,8 +19,7 @@ class MainRecyclerAdapter(private val listItems: List<String>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
         return ViewHolder(itemView)
     }
 

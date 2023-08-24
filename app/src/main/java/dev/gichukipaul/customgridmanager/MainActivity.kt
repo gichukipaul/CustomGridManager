@@ -24,5 +24,4 @@ class MainActivity : AppCompatActivity() {
         val adapter = MainRecyclerAdapter(itemList)
         mainRecyclerView.adapter = adapter
     }
-
 }
