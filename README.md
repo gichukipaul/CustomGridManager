@@ -4,9 +4,9 @@ This project implements a custom `LayoutManager` for `RecyclerView` in Android, 
 
 ## Features
 
-- Number of rows and columns are configurable in the constructor
-- supports reversed (right to left) layout
-- supports RecyclerView item animations
+- Number of rows and columns are configurable in the constructor.
+- supports reversed (right to left) layout.
+- supports RecyclerView item animations.
 
 ## Getting Started
 
